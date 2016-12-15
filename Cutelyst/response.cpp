@@ -111,6 +111,7 @@ void Response::setBody(QIODevice *body)
 void Response::setBody(const QByteArray &body)
 {
     Q_D(Response);
+    qDebug() << "setBody" << body;
     d->setBodyData(body);
 }
 

@@ -70,7 +70,7 @@ void CWsgiEngine::listen()
 
     const auto sockets = m_sockets;
     for (QTcpServer *socket : sockets) {
-        const auto serverAddress = socket->serverAddress().toString();
+        const QString serverAddress = socket->serverAddress().toString() + QLatin1Char(':') + QString::number(socket->serverPort());
         auto server = new TcpServer(serverAddress, m_wsgi, this);
         server->setSocketDescriptor(socket->socketDescriptor());
         server->pauseAccepting();
@@ -148,8 +148,8 @@ bool CWsgiEngine::finalizeHeadersWrite(Context *c, quint16 status, const Headers
 qint64 CWsgiEngine::doWrite(Context *c, const char *data, qint64 len, void *engineData)
 {
     auto conn = static_cast<QIODevice*>(engineData);
-    //    qDebug() << Q_FUNC_INFO << QByteArray(data,len);
     qint64 ret = conn->write(data, len);
+    qDebug() << Q_FUNC_INFO << QByteArray(data,len) << ret << len;
     //    conn->waitForBytesWritten(200);
     return ret;
 }
